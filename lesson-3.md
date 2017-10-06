@@ -76,9 +76,5 @@ multiple tweets
 
 ### WEB
 WEB pages should be accesable through the / root and /id endpoints.
-
-- [ ] GET / - in html <ul> <li> list all the tweets
-    
-- [ ] GET /id - in html <p> show single tweet
-
-
+- [ ] GET `/` - in html `<ul> <li>` list all the tweets
+- [ ] GET `/id` - in html `<p>` show single tweet
