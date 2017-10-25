@@ -1,21 +1,50 @@
-const fs = require ('fs');
+const fs = require ('fs')
+const sqlite3 = require('sqlite3').verbose()
+
 const Utils = require('./utils')
+const Commands = require('./tweets.sql.js')
+
 const tweetsDB = 'tweets.json'
+
+const db = new sqlite3.Database('tweets.db', error => {
+  if (error) console.error(error)
+  console.log('db connected')
+})
+
 const Database = {};
 module.exports = Database;
 
 
+Database.tableCheck = () => {
+  db.all(Commands.getTweetsTable, (error, rows) => {
+    if(error) {
+      db.run(Commands.createTweetsTable)
+    }
+    else if (rows.length) {
+      console.log(rows)
+    } else {
+      console.log('table is empty no tweets, HERE WE NEED TO CREATE TWEETS, using LILITS SCRIPT')
+    }
+  })
+}
+
 Database.write = (path, data) => {
-    fs.writeFile(path, JSON.stringify(data, null, '\t'), function (err) {
-      if (err) throw err;
+
+  console.log(Commands.insertTweet(data.user, data.tweet))
+
+  // db.run(Commands.insertTweet(data.user, data.tweet))
+
+  fs.writeFile(path, JSON.stringify(data, null, '\t'), function (err) {
+    if (err) throw err;
   })
 }
 
 Database.read = () => {
   return new Promise ((resolve, reject) => {
-    fs.readFile(tweetsDB, 'utf8', (err, data) => {
-      if (err) return reject(err);
-      return resolve(data)
+    db.all(Commands.getTweetsTable, (err, rows) => {
+      if (err) return reject(err)
+      console.log(rows)
+      return resolve(rows)
     })
   })
 }
@@ -101,17 +130,21 @@ Database.apiAddTweets = (request) => {
 }
 
 Database.addTweets = (request, tweets) => {
-  return Database.read()
-  .then((data) => {
-    if(!data.toString()){ //file empty
-      let tweetsObject = {}
-      tweetsObject.tweets = tweets //object assign Object.assign(tweets., tweetsToBeAdded) two rows
-      Database.write(tweetsDB, tweetsObject) //return
-    }
-    else{ //file has content
-      let currentData = JSON.parse(data.toString())
-      currentData.tweets = currentData.tweets.concat(tweets)
-      Database.write(tweetsDB, currentData) //return
-    }
+  db.run(Commands.insertTweet(tweets[0].user, tweets[0].tweet), error => {
+    console.error(error)
   })
+  return 'Added'
+  // return Database.read()
+  // .then((data) => {
+  //   if(!data.toString()){ //file empty
+  //     let tweetsObject = {}
+  //     tweetsObject.tweets = tweets //object assign Object.assign(tweets., tweetsToBeAdded) two rows
+  //     Database.write(tweetsDB, tweetsObject) //return
+  //   }
+  //   else{ //file has content
+  //     let currentData = JSON.parse(data.toString())
+  //     currentData.tweets = currentData.tweets.concat(tweets)
+  //     Database.write(tweetsDB, currentData) //return
+  //   }
+  // })
 }

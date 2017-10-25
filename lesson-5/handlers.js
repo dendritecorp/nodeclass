@@ -8,6 +8,10 @@ const Utils = require('./utils')
 const Template = require('./template.js')
 
 
+// Run DB check
+Database.tableCheck()
+//
+
 const Handlers = {};
 module.exports = Handlers;
 
