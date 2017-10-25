@@ -1,0 +1,44 @@
+{
+	"tweets": [
+		{
+			"id": 708818941,
+			"user": "Donald J. Trump",
+			"tweet": "The current tax code is a burden on American taxpayers & harmful to job-creators. Americans need #TaxReform!"
+		},
+		{
+			"id": 186390418,
+			"user": "Bill Gates",
+			"tweet": "Science can make the world a better place – but only if we work together."
+		},
+		{
+			"id": 585146304,
+			"user": "Elon Musk",
+			"tweet": "Tesla Semi truck unveil & test ride tentatively scheduled for Oct 26th in Hawthorne. Worth seeing this beast in person. It's unreal."
+		},
+		{
+			"id": 547332678,
+			"user": "SpaceX",
+			"tweet": "Falcon 9 first stage has landed on Of Course I Still Love You — third successful mission with a flight-proven orbital class rocket."
+		},
+		{
+			"id": 12167898,
+			"user": "Elon Musk",
+			"tweet": "Officially verified as the first production electric car to exceed 1000km on a single charge! Congratulations Tesla Owners Italia!!"
+		},
+		{
+			"id": 320317099,
+			"user": "Tesla",
+			"tweet": "Tesla Model X is the first SUV ever to receive a 5-Star safety rating in every category"
+		},
+		{
+			"id": 624756632,
+			"user": "Steve Wozniak",
+			"tweet": "Catch me speaking about disruptive change on 21 Nov 2017 at the 13th WIEF in Kuching, Sarawak, Malaysia"
+		},
+		{
+			"id": 546204964,
+			"user": "fsdfds",
+			"tweet": "21321321"
+		}
+	]
+}
