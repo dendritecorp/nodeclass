@@ -1,9 +1,10 @@
 'use strict'
 
 const http = require('http');
-
 const Handlers = require('./handlers')
 const Utils = require('./utils')
+
+const PORT = 8080
 
 http.createServer((request, response) => {
   return Handlers.handleEndpoints(request, response)
@@ -11,4 +12,4 @@ http.createServer((request, response) => {
     console.log({err})
     Utils.badRequestResponse(response, err)
   })
-}).listen(8080);
+}).listen(PORT || 3000);
