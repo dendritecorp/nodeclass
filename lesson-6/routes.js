@@ -19,7 +19,6 @@ routes.push({
   handler: Handlers.createTweets
 })
 
-
 routes.push({
   method: 'GET',
   path:'/bye/{lastname}',
