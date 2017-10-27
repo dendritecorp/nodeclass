@@ -19,13 +19,11 @@ Utils.readBody = (request) => {
 
 Utils.dataToTweet = (data) => {
   let tweetObject = {}
-  tweetObject.id = Math.floor(Math.random() * 999999999)
   data.split('&').forEach((pair) => {
     pair = pair.split('=')
     tweetObject[pair[0]] = decodeURIComponent(pair[1].replace(/\+/g, ' '))
   })
-  const tweetArray = [tweetObject]
-  return tweetArray
+  return [tweetObject]
 }
 
 Utils.responseAddTweets = (response) => {

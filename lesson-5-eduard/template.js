@@ -9,26 +9,29 @@ module.exports = Template;
 
 Template.allTweets = (response, data) => {
   return new Promise ((resolve, reject) => {
-    fs.readFile(AllTweetsTemplate, 'utf-8', function(error, source){
+    fs.readFile(AllTweetsTemplate, 'utf-8', (error, source) => {
       if (error) return reject(error)
-      var template = Handlebars.compile(source);
+      const template = Handlebars.compile(source);
       if(data.toString()){
-        var html = template({tweets: data});
-      } else {
-        var html = template({})
+        data.map((tweet) => {
+          tweet.tweet = decodeURIComponent(tweet.tweet)
+          tweet.user = decodeURIComponent(tweet.user)
+        });
+        return resolve(template({tweets: data}));
       }
-      return resolve(html)
+        return resolve(template({}))
     })
   })
 }
 
 Template.oneTweet = (foundTweet) => {
   return new Promise ((resolve, reject) => {
-    fs.readFile(OneTweetTemplate, 'utf-8', function(error, source){
+    fs.readFile(OneTweetTemplate, 'utf-8', (error, source) => {
       if (error) return reject(error)
+      foundTweet.tweet = decodeURIComponent(foundTweet.tweet)
+      foundTweet.user = decodeURIComponent(foundTweet.user)
       const template = Handlebars.compile(source)
-      let html = template({tweets: foundTweet})
-      return resolve(html)
+      return resolve(template({tweets: foundTweet}))
     })
   })
 }
