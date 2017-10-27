@@ -8,27 +8,6 @@ Utils.apiShowsMessage = mes => {
     return obj;
 };
 
-Utils.readBody = (request) => {
-   // console.log(request);
-    return new Promise ((resolve,reject) => {
-        let body = [];
-        console.log('eee');
-        request.on('error', (err) => {
-            return reject(err);
-        }).on('data', (chunk) => {
-            console.log('chunk');
-            body.push(chunk);
-        }).on('end', () => {
-            //console.log('33');
-
-            body = Buffer.concat(body).toString();
-            console.log(body);
-
-            return resolve(body)
-        })
-    })
-}
-
 Utils.responsePut = (response) => {
     return response(Utils.apiShowsMessage('Successfully created tweet')).header('Content-Type', 'aplication/json');
 };
