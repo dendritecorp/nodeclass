@@ -20,42 +20,18 @@ routes.push({
 routes.push({
   method: 'GET',
   path:'/view/{id}',
-  config: {
-    validate: {
-      params: {
-        id: Joi.string()
-      }
-    }
-  },
   handler: Handlers.webViewTweet
 })
 
 routes.push({
   method: 'POST',
   path:'/delete/{id}',
-  config: {
-    validate: {
-      params: {
-        id: Joi.string()
-      }
-    }
-  },
   handler: Handlers.webDeleteTweet
 })
 
 routes.push({
   method: 'POST',
   path:'/update/{id}',
-  config: {
-    validate: {
-      params: {
-        id: Joi.string()
-      },
-      query: {
-        tweet: Joi.string()
-      }
-    }
-  },
   handler: Handlers.webUpdateTweet
 })
 
@@ -74,38 +50,17 @@ routes.push({
 routes.push({
   method: 'GET',
   path:'/api/tweets/{id}',
-  config: {
-    validate: {
-      params: {
-        id: Joi.string()
-      }
-    }
-  },
   handler: Handlers.apiGetOneTweet
 })
 
 routes.push({
   method: 'PUT',
   path:'/api/tweets/{id}',
-  config: {
-    validate: {
-      params: {
-        id: Joi.string()
-      }
-    }
-  },
   handler: Handlers.apiUpdateTweet
 })
 
 routes.push({
   method: 'DELETE',
   path:'/api/tweets/{id}',
-  config: {
-    validate: {
-      params: {
-        id: Joi.string()
-      }
-    }
-  },
   handler: Handlers.apiDeleteTweet
 })

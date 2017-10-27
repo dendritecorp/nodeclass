@@ -1,8 +1,9 @@
 
 const fs = require ('fs');
+const Handlebars = require('handlebars');
+
 const AllTweetsTemplate =  './public/index.hbs'
 const OneTweetTemplate =  './public/tweet.hbs'
-const Handlebars = require('handlebars');
 
 const Template = {};
 module.exports = Template;
@@ -12,14 +13,11 @@ Template.allTweets = (data) => {
     fs.readFile(AllTweetsTemplate, 'utf-8', (error, source) => {
       if (error) return reject(error)
       const template = Handlebars.compile(source);
-      if(data.toString()){
-        data.map((tweet) => {
-          tweet.tweet = decodeURIComponent(tweet.tweet)
-          tweet.user = decodeURIComponent(tweet.user)
-        });
-        return resolve(template({tweets: data}));
-      }
-        return resolve(template({}))
+      data.map((tweet) => {
+        tweet.tweet = decodeURIComponent(tweet.tweet)
+        tweet.user = decodeURIComponent(tweet.user)
+      });
+      return resolve(template({tweets: data}));
     })
   })
 }
