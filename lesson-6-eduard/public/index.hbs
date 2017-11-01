@@ -8,9 +8,6 @@
         padding: 20px;
         width: 500px;
       }
-      .tweet {
-        display: inline-block;
-      }
       form {
         display: inline-block;
       }
@@ -33,10 +30,11 @@
     <div class="card-deck">
       {{#each tweets}}
       <div class="col-sm-4">
-        <div class="tweet card">
+        <div class="card">
           <div class="card-block">
             <h4 class="card-title">{{this.user}}</h4>
             <a id="tweetArea" href="view/{{this.id}}"><p class="card-text">{{this.tweet}}</p></a>
+            <p class="card-text"><small class="text-muted">Posted on {{this.created_at}}</small></p>
             <form class="" action="/delete/{{this.id}}" method="post">
               <input type="submit" class="btn btn-danger btn-sm" value="Delete tweet">
             </form>

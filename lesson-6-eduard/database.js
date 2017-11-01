@@ -1,8 +1,7 @@
 const fs = require ('fs');
 const sqlite3 = require('sqlite3').verbose()
 
-const Utils = require('./utils')
-const Commands = require('./tweets.sql.js')
+const Queries = require('./queries.js')
 
 const tweetsDB = 'tweets.json'
 const Database = {}
@@ -15,16 +14,16 @@ const db = new sqlite3.Database('tweets.db', error => {
 module.exports = Database;
 
 Database.tableCheck = () => {
-  db.all(Commands.getTweetsTable, (error, rows) => {
+  db.all(Queries.getTweetsTable, (error, rows) => {
     if(error) {
-      db.run(Commands.createTweetsTable)
+      db.run(Queries.createTweetsTable)
     }
   })
 }
 
 Database.read = () => {
   return new Promise ((resolve, reject) => {
-    db.all(Commands.getTweetsTable, (err, rows) => {
+    db.all(Queries.getTweetsTable, (err, rows) => {
       if (err) return reject(err)
       rows.map((row) => {
         row.user = decodeURIComponent(row.user)
@@ -38,7 +37,8 @@ Database.read = () => {
 Database.addTweets = (tweets) => {
   return new Promise ((resolve, reject) => {
     tweets.forEach((tweet) => {
-      db.run(Commands.insertTweet(encodeURIComponent(tweet.user), encodeURIComponent(tweet.tweet)), error => {
+      const created_at = new Date().toISOString().slice(0, 19).replace('T', ' ') + ' UTC'
+      db.run(Queries.insertTweet(encodeURIComponent(tweet.user), encodeURIComponent(tweet.tweet), created_at), error => {
         if (error) reject(error)
       })
     })
@@ -48,27 +48,27 @@ Database.addTweets = (tweets) => {
 
 Database.updateTweet = (tweetID, newText) => {
   return new Promise ((resolve, reject) => {
-    const found = resolve(Database.getTweet(tweetID))
-    db.run(Commands.updateTweet(encodeURIComponent(tweetID), encodeURIComponent(newText)), error => {
-    if (error) reject(error)
-    return resolve(found ? true : false)
+    const updated_at = new Date().toISOString().slice(0, 19).replace('T', ' ') + ' UTC'
+    db.run(Queries.updateTweet(encodeURIComponent(tweetID), encodeURIComponent(newText), updated_at), function(error){
+      if (error) reject(error)
+      return resolve(this.changes ? true : false)
     })
   })
 }
 
 Database.deleteTweet = (tweetID) => {
   return new Promise ((resolve, reject) => {
-    const found = resolve(Database.getTweet(tweetID))
-    db.run(Commands.deleteTweet(encodeURIComponent(tweetID)), error => {
+    const deleted_at = new Date().toISOString().slice(0, 19).replace('T', ' ') + ' UTC'
+    db.run(Queries.deleteTweet(encodeURIComponent(tweetID), deleted_at), function(error){
       if (error) return reject(error);
-      return resolve(found ? true : false)
+      return resolve(this.changes ? true : false)
     })
   })
 }
 
 Database.getTweet = (tweetID) => {
   return new Promise ((resolve, reject) => {
-    db.all(Commands.getTweet(encodeURIComponent(tweetID)), (error, row) => {
+    db.all(Queries.getTweet(encodeURIComponent(tweetID)), (error, row) => {
       if (error) return reject(error)
       if(row[0]){
         row[0].user = decodeURIComponent(row[0].user)
