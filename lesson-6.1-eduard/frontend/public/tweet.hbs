@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+    <style media="screen">
+    form {
+      display: inline-block;
+    }
+  </style>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
+  </head>
+  <body>
+    <div class="card-deck">
+      {{#with tweets}}
+      <div class="col-sm-4">
+        <div class="card">
+          <div class="card-block">
+            <h4 class="card-title">{{this.user}}</h4>
+            <p class="card-text">{{this.tweet}}</p>
+            <p class="card-text"><small class="text-muted">Posted on {{this.created_at}}</small></p>
+            <form class="" action="/delete/{{this.id}}" method="post">
+              <input type="submit" class="btn btn-danger btn-sm" value="Delete tweet">
+            </form>
+            <form class="" action="/update/{{this.id}}" method="post">
+              <input type="text"  name="text" id="user" placeholder="New text">
+              <input type="submit" class="btn btn-info btn-sm" value="Update tweet">
+            </form>
+          </div>
+        </div>
+      </div>
+      {{/with}}
+    </div>
+  </body>
+</html>
