@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <title>Tweets homepage</title>
     <style>
-      #myForm {
+      .myForm {
         padding: 20px;
         width: 500px;
       }
@@ -15,7 +15,7 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
   </head>
   <body>
-    <form method="post" id="myForm">
+    <form method="post" class="myForm">
       <div class="form-group">
         <label for="user">User</label>
         <input type="text" class="form-control" name="user" id="user" placeholder="Enter username">
@@ -47,5 +47,97 @@
       </div>
       {{/each}}
     </div>
+    <hr>
+    <form class="myForm">
+      <div class="form-group">
+        <label for="user">User</label>
+        <input type="text" class="form-control" name="user" id="ajax-user" placeholder="Enter username">
+      </div>
+      <div class="form-group">
+        <label for="textarea">Tweet</label>
+        <textarea class="form-control" id="ajax-textarea" placeholder="Enter tweet" name="tweet"></textarea>
+      </div>
+      <input onclick="createTweet()" type="button" class="btn btn-primary" value="Submit">
+    </form>
+    <div class="card-deck" id="cards-container"></div>
+    <script type="text/javascript">
+
+    const loadTweets = (tweets) => {
+      let output = ''
+      tweets.forEach(tweet => {
+        output += `
+        <div class="col-sm-4">
+          <div class="card">
+            <div class="card-block">
+              <h4 class="card-title">${tweet.user}</h4>
+              <a id="tweetArea" href="view/${tweet.id}"><p class="card-text">${tweet.tweet}</p></a>
+              <p class="card-text"><small class="text-muted">Posted on ${tweet.created_at}</small></p>
+              <form>
+                <input onclick="deleteTweet(${tweet.id})" type="button" class="btn btn-danger btn-sm" value="Delete tweet">
+              </form>
+              <form>
+                <input type="text"  name="text" id="tweet-${tweet.id}" placeholder="New text">
+                <input onclick="updateTweet(${tweet.id})" type="button" class="btn btn-info btn-sm" value="Update tweet">
+              </form>
+            </div>
+          </div>
+        </div>`;
+      })
+      return output
+    }
+
+    const renderPage = () => {
+      console.log('XMLHttpRequest renderPage')
+      const randomNumber = Math.round(Math.random()*100000) + 1
+      const xhr = new XMLHttpRequest()
+      xhr.open('GET', `/api/tweets?${randomNumber}`)
+      xhr.send()
+      xhr.onload = function(){
+        if (xhr.readyState == 4 && xhr.status == 200) {
+          const container = document.getElementById("cards-container")
+          container.innerHTML = loadTweets(JSON.parse(this.responseText))
+        }
+      }
+    }
+
+    renderPage()
+
+    const createTweet = () => {
+      const xhr = new XMLHttpRequest()
+      const newUser = document.getElementById('ajax-user').value
+      const newText = document.getElementById('ajax-textarea').value
+      xhr.open('POST', '/api/tweets')
+      xhr.send(JSON.stringify([{user: newUser, tweet: newText}]))
+      xhr.onreadystatechange = () => {
+        if (xhr.readyState == 4 && xhr.status == 200) {
+          renderPage()
+        }
+      }
+    }
+
+    const deleteTweet = (tweetID) => {
+      const xhr = new XMLHttpRequest();
+      xhr.open('DELETE', `/api/tweets/${tweetID}`)
+      xhr.send()
+      xhr.onreadystatechange = function() {
+        if (xhr.readyState == 4 && xhr.status == 200) {
+          renderPage()
+        }
+      }
+    }
+
+    const updateTweet = (tweetID) => {
+      const xhr = new XMLHttpRequest();
+      const newText = document.getElementById(`tweet-${tweetID}`).value
+      xhr.open('PUT', `/api/tweets/${tweetID}`)
+      xhr.send(JSON.stringify({tweet: newText}))
+      xhr.onreadystatechange = function() {
+        if (xhr.readyState == 4 && xhr.status == 200) {
+          renderPage()
+        }
+      }
+    }
+
+    </script>
   </body>
 </html>
